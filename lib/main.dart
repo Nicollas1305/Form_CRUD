@@ -30,12 +30,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final List<User> _users = [];
 
-  List<User> get _recentUsers {
-    return _users.where((us) {
-      return us.name.isNotEmpty;
-    }).toList();
-  }
-
   _addUser(String name, String email) {
     final newUser = User(
       id: Random().nextDouble().toString(),
