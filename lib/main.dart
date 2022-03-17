@@ -1,9 +1,8 @@
-// Copyright (c) 2019, the Dart project authors.  Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:formulario_flutter/views/user_list.dart';
+import 'package:formulario_flutter/components/user_form.dart';
+import 'package:formulario_flutter/components/user_list.dart';
+import 'package:formulario_flutter/models/user.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,9 +13,85 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.cyan,
       ),
-      home: UserList(),
+      home: Home(),
+    );
+  }
+}
+
+class Home extends StatefulWidget {
+  //static const users = DUMMY_USERS;
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final List<User> _users = [];
+
+  List<User> get _recentUsers {
+    return _users.where((us) {
+      return us.name.isNotEmpty;
+    }).toList();
+  }
+
+  _addUser(String name, String email) {
+    final newUser = User(
+      id: Random().nextDouble().toString(),
+      name: name,
+      email: email,
+    );
+
+    setState(() {
+      _users.add(newUser);
+    });
+  }
+
+  _openUserForm(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) {
+        return UserForm(_addUser);
+      },
+    );
+  }
+
+  _removeUser(String id) {
+    setState(() {
+      _users.removeWhere((us) => us.id == id);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: Text('Voos Infraero'),
+      actions: [
+        IconButton(
+          onPressed: () => _openUserForm(context),
+          icon: Icon(Icons.add),
+        )
+      ],
+    );
+
+    final availabeHeight = MediaQuery.of(context).size.height -
+        appBar.preferredSize.height -
+        MediaQuery.of(context).padding.top;
+
+    return Scaffold(
+      appBar: appBar,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              height: availabeHeight,
+              child: UserList(_users, _removeUser),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

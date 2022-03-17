@@ -9,7 +9,7 @@ class UserTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(user.nome),
+      title: Text(user.name),
       subtitle: Text(user.email),
       trailing: SizedBox(
         width: 100.00,

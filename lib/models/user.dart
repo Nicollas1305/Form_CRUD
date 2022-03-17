@@ -2,12 +2,12 @@ import 'package:flutter/widgets.dart';
 
 class User {
   final String id;
-  final String nome;
+  final String name;
   final String email;
 
   const User({
     required this.id,
-    required this.nome,
+    required this.name,
     required this.email,
   });
 }
